@@ -8,22 +8,21 @@ const props = defineProps({
     required: true
   }
 });
-
 const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
 </script>
 
 <template>
   <div class="picture-item">
-    <img :src="fullUrl(picture.imageUrl)" alt="picture" loading="lazy" />
+    <img :src="fullUrl(props.picture.imageUrl)" alt="Main Image" loading="lazy" />
     <div class="picture_info">
       <div class="about_info">
         <div class="to_bottom">
-          <h1 class="title">{{ picture.name }}</h1>
-          <p class="subtitle-accent">{{ picture.created }}</p>
+          <h1 class="title">{{ props.picture.name }}</h1>
+          <p class="subtitle-accent">{{ props.picture.created }}</p>
         </div>
         <div class="to_right">
-          <h1 class="title">{{ picture.author }}</h1>
-          <p class="subtitle-accent">{{ picture.location }}</p>
+          <h1 class="title">{{ props.picture.author }}</h1>
+          <p class="subtitle-accent">{{ props.picture.location }}</p>
         </div>
       </div>
     </div>
@@ -60,7 +59,7 @@ const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
       transform: translateX(-250%);
     }
 
-    &::after {
+    &::before {
       content: '';
       position: absolute;
       left: -1.25rem;
@@ -68,6 +67,11 @@ const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
       width: 2px;
       height: 100%;
       background-color: $accent-red;
+      display: none;
+
+      @media screen and (min-width: $lg) {
+        display: block;
+      }
     }
   }
 
@@ -90,12 +94,24 @@ const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 300px;
+  width: 85%;
+  max-width: 300px;
   background-color: $primary-white;
   padding: 20px;
 
-  @media screen and (max-width: ($md - 1px)) {
-    width: 236px;
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 1.5rem;
+    background: $accent-red url('@/assets/arrow_icon.svg') no-repeat;
+    background-position: center left;
+
+    @media screen and (min-width: $lg) {
+      display: none;
+    }
   }
 }
 
@@ -109,6 +125,10 @@ const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
 [data-theme='dark'] {
   .picture_info {
     background-color: $primary-black;
+
+    &::after {
+      background-color: $accent-gold;
+    }
   }
 
   .about_info {

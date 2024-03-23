@@ -4,6 +4,7 @@ import { usePictureStore } from './stores/pictures';
 import HeaderItem from './components/HeaderItem.vue';
 import PictureContainer from './components/PictureContainer.vue';
 import PaginationItem from './components/PaginationItem.vue';
+import SearchItem from './components/SearchItem.vue';
 
 const store = usePictureStore();
 const pictures = ref(store.pictures);
@@ -24,7 +25,6 @@ watch(
 );
 
 async function alertPage(e: { value: number }) {
-  console.log(e.value);
   currentPage.value = e.value;
   await store.getPictures(currentPage.value);
 }
@@ -35,9 +35,14 @@ async function alertPage(e: { value: number }) {
   <main>
     <div class="wrapper">
       <div class="main_content">
+        <SearchItem />
         <PictureContainer :pictures="pictures" />
-        <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
-          @changePage="(e) => alertPage(e)" />
+        <PaginationItem
+          v-if="pageCount > 1"
+          :currentPage="currentPage"
+          :pagesCount="pageCount"
+          @changePage="(e) => alertPage(e)"
+        />
       </div>
     </div>
   </main>
@@ -45,7 +50,7 @@ async function alertPage(e: { value: number }) {
 
 <style scoped lang="scss">
 main {
-  padding-bottom: 5rem;
+  padding: 5rem 0;
 
   .wrapper {
     height: 100%;
@@ -65,7 +70,7 @@ main {
   }
 
   @media screen and (min-width: $lg) {
-    padding-bottom: 0;
+    padding: 6.25rem 0;
   }
 }
 </style>

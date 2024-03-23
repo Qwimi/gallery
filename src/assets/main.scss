@@ -49,14 +49,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-[data-theme='dark'] {
-  body {
-    background-color: $primary-black;
-    color: $primary-light-gray;
-  }
-}
-
 body {
   font-family: 'Inter Medium';
   background-color: $primary-white;
@@ -67,9 +59,10 @@ html,
 body {
   height: 100vh;
   overflow-y: auto;
-  @media screen and (min-width: $lg) {
-    overflow: hidden;
-  }
+  line-height: 1.4;
+  // @media screen and (min-width: $lg) {
+  //   overflow-y: hidden;
+  // }
 }
 
 #app {
@@ -104,4 +97,60 @@ h1.title {
 
 svg {
   fill: currentColor;
+}
+
+input {
+  font-family: 'Inter Light';
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid $primary-light-gray;
+  border-radius: 0.25rem;
+  outline: none;
+  color: $primary-dark-gray;
+  &:focus {
+    border: 1px solid $primary-dark-gray;
+  }
+}
+
+.input-container {
+  color: $primary-dark-gray;
+}
+
+::placeholder {
+  color: $secondary-gray;
+  font-size: 0.75rem;
+  @media screen and (min-width: $md) {
+    font-size: 1rem;
+  }
+}
+
+button {
+  background: inherit;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+[data-theme='dark'] {
+  body {
+    background-color: $primary-black;
+    color: $primary-light-gray;
+  }
+
+  input {
+    background-color: $secondary-black;
+    border: 1px solid $secondary-black;
+    color: $primary-light-gray;
+    &:focus {
+      border-color: $primary-light-gray;
+    }
+  }
+
+  .input-container {
+    color: $primary-light-gray;
+  }
 }
