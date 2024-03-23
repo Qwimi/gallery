@@ -37,12 +37,8 @@ async function alertPage(e: { value: number }) {
       <div class="main_content">
         <SearchItem />
         <PictureContainer :pictures="pictures" />
-        <PaginationItem
-          v-if="pageCount > 1"
-          :currentPage="currentPage"
-          :pagesCount="pageCount"
-          @changePage="(e) => alertPage(e)"
-        />
+        <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
+          @changePage="(e) => alertPage(e)" />
       </div>
     </div>
   </main>
@@ -69,9 +65,6 @@ main {
     }
   }
 
-  @media screen and (min-width: $lg) {
-    padding: 6.25rem 0;
-  }
 }
 </style>
 ./stores/oictures
