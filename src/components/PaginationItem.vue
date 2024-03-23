@@ -11,37 +11,37 @@ const props = defineProps({
     type: Number,
     required: true
   }
-})
+});
 
-const emit = defineEmits(['changePage'])
+const emit = defineEmits(['changePage']);
 
-const current = ref(props.currentPage)
+const current = ref(props.currentPage);
 
-const pages = Array.from({ length: props.pagesCount }, (_, index) => index + 1)
+const pages = Array.from({ length: props.pagesCount }, (_, index) => index + 1);
 
 function toPage(page: number) {
-  current.value = page
-  emit('changePage', current)
+  current.value = page;
+  emit('changePage', current);
 }
 
 function toPrev() {
   if (current.value > 1) {
-    current.value -= 1
+    current.value -= 1;
   } else {
-    current.value = pages[pages.length - 1]
+    current.value = pages[pages.length - 1];
   }
-  emit('changePage', current)
+  emit('changePage', current);
 }
 
 function toNext() {
   console.log(pages[pages.length - 1]);
 
   if (current.value != pages[pages.length - 1]) {
-    current.value += 1
+    current.value += 1;
   } else {
-    current.value = pages[0]
+    current.value = pages[0];
   }
-  emit('changePage', current)
+  emit('changePage', current);
 }
 </script>
 
@@ -50,7 +50,12 @@ function toNext() {
     <button class="arrow arrow-left" @click="toPrev">
       <IconArrowLeft />
     </button>
-    <button v-for="page in pages" :key="page" :class="{ active: page == current }" @click="toPage(page)">
+    <button
+      v-for="page in pages"
+      :key="page"
+      :class="{ active: page == current }"
+      @click="toPage(page)"
+    >
       {{ page }}
     </button>
     <button class="arrow arrow-right" @click="toNext">
@@ -80,7 +85,7 @@ function toNext() {
     &.active,
     &.arrow:hover {
       border-radius: 0.25rem;
-      background-color: rgba($primary-black, .05);
+      background-color: rgba($primary-black, 0.05);
       font-family: 'Inter Medium';
     }
   }
@@ -89,6 +94,11 @@ function toNext() {
 [data-theme='dark'] {
   button {
     color: $primary-light-gray;
+
+    &.active,
+    &.arrow:hover {
+      background-color: $secondary-black;
+    }
   }
 }
 

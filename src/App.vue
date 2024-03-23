@@ -23,11 +23,9 @@ watch(
   }
 );
 
-function alertPage(e: {
-  value: number
-}) {
+function alertPage(e: { value: number }) {
   console.log(e.value);
-  currentPage.value = e.value
+  currentPage.value = e.value;
   store.getPictures(currentPage.value);
 }
 </script>
@@ -38,8 +36,12 @@ function alertPage(e: {
     <div class="wrapper">
       <div class="main_content">
         <PictureContainer :pictures="pictures" />
-        <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
-          @changePage="(e) => alertPage(e)" />
+        <PaginationItem
+          v-if="pageCount > 1"
+          :currentPage="currentPage"
+          :pagesCount="pageCount"
+          @changePage="(e) => alertPage(e)"
+        />
       </div>
     </div>
   </main>
