@@ -10,9 +10,9 @@ const pictures = ref(store.pictures);
 const pageCount = ref(store.pages);
 const currentPage = ref(1);
 
-onMounted(() => {
+onMounted(async () => {
   store.getPictures(currentPage.value);
-  store.getPages();
+  await store.getPages();
 });
 
 watch(
@@ -23,10 +23,10 @@ watch(
   }
 );
 
-function alertPage(e: { value: number }) {
+async function alertPage(e: { value: number }) {
   console.log(e.value);
   currentPage.value = e.value;
-  store.getPictures(currentPage.value);
+  await store.getPictures(currentPage.value);
 }
 </script>
 
@@ -36,12 +36,8 @@ function alertPage(e: { value: number }) {
     <div class="wrapper">
       <div class="main_content">
         <PictureContainer :pictures="pictures" />
-        <PaginationItem
-          v-if="pageCount > 1"
-          :currentPage="currentPage"
-          :pagesCount="pageCount"
-          @changePage="(e) => alertPage(e)"
-        />
+        <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
+          @changePage="(e) => alertPage(e)" />
       </div>
     </div>
   </main>
