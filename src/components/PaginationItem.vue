@@ -50,12 +50,7 @@ function toNext() {
     <button class="arrow arrow-left" @click="toPrev">
       <IconArrowLeft />
     </button>
-    <button
-      v-for="page in pages"
-      :key="page"
-      :class="{ active: page == current }"
-      @click="toPage(page)"
-    >
+    <button v-for="page in pages" :key="page" :class="{ active: page == current }" @click="toPage(page)">
       {{ page }}
     </button>
     <button class="arrow arrow-right" @click="toNext">
@@ -70,10 +65,10 @@ function toNext() {
   gap: 0.25rem;
 
   button {
+    font-family: 'Inter Light';
     color: $primary-dark-gray;
     height: 1.5rem;
     width: 1.5rem;
-    font-family: 'Inter Light';
 
     &:hover:not(.arrow, .active) {
       border-bottom: 1px solid $secondary-gray;

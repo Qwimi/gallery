@@ -30,11 +30,16 @@ async function loadPage(e: { value: number }) {
   currentPage.value = e.value;
   await store.getPictures(currentPage.value);
 }
+
+async function filterPictures(e: { value: number; }) {
+  console.log(e.value);
+
+}
 </script>
 
 <template>
   <HeaderItem />
-  <FilterMenu @closeMenu="() => isMenuOpen = !isMenuOpen" v-show="isMenuOpen" />
+  <FilterMenu @closeMenu="() => isMenuOpen = !isMenuOpen" v-show="isMenuOpen" @sentForm="(e) => filterPictures(e)" />
   <main>
     <div class="wrapper">
       <div class="main_content">
