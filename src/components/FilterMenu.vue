@@ -69,9 +69,9 @@ watch(
           </div>
         </summary>
         <div class="year-container">
-          <input type="text" name="" id="" placeholder="From">
+          <input type="number" name="" id="" placeholder="From">
           <IconMinus />
-          <input type="text" name="" placeholder="To">
+          <input type="number" name="" placeholder="To">
         </div>
       </details>
     </form>
@@ -159,6 +159,12 @@ details {
     .icon-minus {
       display: block;
     }
+  }
+}
+
+[data-theme='dark'] {
+  form {
+    background-color: $primary-black;
   }
 }
 </style>
