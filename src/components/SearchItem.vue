@@ -4,7 +4,7 @@ import IconSearch from './icons/IconSearch.vue';
 import IconCloseSmall from './icons/IconCloseSmall.vue';
 import IconFilter from './icons/IconFilter.vue';
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(['openMenu']);
 const searchString = ref('');
 </script>
 
@@ -15,17 +15,12 @@ const searchString = ref('');
         <span class="search-icon icon-left">
           <IconSearch />
         </span>
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Painting title"
-          v-model="searchString"
-        />
+        <input type="text" class="search-input" placeholder="Painting title" v-model="searchString" />
         <span class="search-icon icon-right" v-show="searchString" @click="searchString = ''">
           <IconCloseSmall />
         </span>
       </div>
-      <button>
+      <button @click="$emit('openMenu')">
         <IconFilter />
       </button>
     </div>
@@ -93,6 +88,7 @@ button {
   padding: 0.25rem;
   background-color: $secondary-white;
   color: $primary-dark-gray;
+  border-radius: 0.25rem;
 }
 
 [data-theme='dark'] {

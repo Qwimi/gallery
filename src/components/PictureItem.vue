@@ -13,7 +13,7 @@ const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
 
 <template>
   <div class="picture-item">
-    <img :src="fullUrl(props.picture.imageUrl)" alt="Main Image" loading="lazy" />
+    <img :src="fullUrl(props.picture.imageUrl)" alt="Не удалось загрузить изображение(" loading="lazy" />
     <div class="picture_info">
       <div class="about_info">
         <div class="to_bottom">

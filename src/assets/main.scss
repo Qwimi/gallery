@@ -49,20 +49,18 @@
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  font-family: 'Inter Medium';
-  background-color: $primary-white;
-  color: $primary-black;
-}
 
 html,
 body {
   height: 100vh;
   overflow-y: auto;
   line-height: 1.4;
-  // @media screen and (min-width: $lg) {
-  //   overflow-y: hidden;
-  // }
+}
+
+body {
+  font-family: 'Inter Medium';
+  background-color: $primary-white;
+  color: $primary-black;
 }
 
 #app {
@@ -86,7 +84,7 @@ main {
   }
 }
 
-h1.title {
+.title {
   font-size: 0.75rem;
   text-transform: uppercase;
   font-family: 'CormorantSC-Medium';
@@ -99,7 +97,8 @@ svg {
   fill: currentColor;
 }
 
-input {
+input,
+select {
   font-family: 'Inter Light';
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -113,6 +112,9 @@ input {
     border: 1px solid $primary-dark-gray;
   }
 }
+
+// select {
+// }
 
 .input-container {
   color: $primary-dark-gray;

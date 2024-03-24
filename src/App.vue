@@ -5,15 +5,17 @@ import HeaderItem from './components/HeaderItem.vue';
 import PictureContainer from './components/PictureContainer.vue';
 import PaginationItem from './components/PaginationItem.vue';
 import SearchItem from './components/SearchItem.vue';
+import FilterMenu from './components/FilterMenu.vue';
 
 const store = usePictureStore();
 const pictures = ref(store.pictures);
 const pageCount = ref(store.pages);
 const currentPage = ref(1);
+const isMenuOpen = ref(false)
 
-onMounted(async () => {
+onMounted(() => {
   store.getPictures(currentPage.value);
-  await store.getPages();
+  store.getPages();
 });
 
 watch(
@@ -24,7 +26,7 @@ watch(
   }
 );
 
-async function alertPage(e: { value: number }) {
+async function loadPage(e: { value: number }) {
   currentPage.value = e.value;
   await store.getPictures(currentPage.value);
 }
@@ -32,13 +34,14 @@ async function alertPage(e: { value: number }) {
 
 <template>
   <HeaderItem />
+  <FilterMenu @closeMenu="() => isMenuOpen = !isMenuOpen" v-show="isMenuOpen" />
   <main>
     <div class="wrapper">
       <div class="main_content">
-        <SearchItem />
+        <SearchItem @openMenu="() => isMenuOpen = !isMenuOpen" />
         <PictureContainer :pictures="pictures" />
         <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
-          @changePage="(e) => alertPage(e)" />
+          @changePage="(e) => loadPage(e)" />
       </div>
     </div>
   </main>
