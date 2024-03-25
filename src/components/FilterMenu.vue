@@ -11,9 +11,11 @@ const locations = ref(store.locations);
 const inputValues = ref({
   authorId: 0,
   locationId: 0,
-  created_gte: 0,
-  created_lte: 0
+  created_gte: '',
+  created_lte: ''
 });
+const selectedAuthor = ref('')
+let selectedLocation = ref('')
 
 onMounted(() => {
   store.getAllAuthors();
@@ -28,6 +30,23 @@ watch(
 watch(
   () => store.locations,
   () => (locations.value = store.locations)
+);
+
+watch(
+  [selectedAuthor],
+  () => {
+    const author = authors.value.find(el => el.name === selectedAuthor.value)
+    if (author) inputValues.value.authorId = author.id
+  }
+);
+
+
+watch(
+  [selectedLocation],
+  () => {
+    const location = locations.value.find(el => el.location === selectedLocation.value)
+    if (location) inputValues.value.locationId = location.id
+  }
 );
 
 const emit = defineEmits(['closeMenu', 'sentForm']);
@@ -45,9 +64,11 @@ const resetForm = (e: { preventDefault: () => void }) => {
   inputValues.value = {
     authorId: 0,
     locationId: 0,
-    created_gte: 0,
-    created_lte: 0
+    created_gte: '',
+    created_lte: ''
   };
+  selectedAuthor.value = ''
+  selectedLocation.value = ''
 };
 </script>
 
@@ -55,7 +76,7 @@ const resetForm = (e: { preventDefault: () => void }) => {
   <div class="form-overflow">
     <div class="closeMenu" @click="$emit('closeMenu')"></div>
     <form>
-      <span class="close-icon" @click="$emit('closeMenu')">
+      <span class="icon-close" @click="$emit('closeMenu')">
         <IconClose />
       </span>
       <div class="inputs">
@@ -69,11 +90,10 @@ const resetForm = (e: { preventDefault: () => void }) => {
               <IconMinus />
             </div>
           </summary>
-          <select v-model="inputValues.authorId" placeholder="Select the artist">
-            <option :value="artist.id" v-for="artist in authors" :key="artist.id">
-              {{ artist.name }}
-            </option>
-          </select>
+          <input list="artist" placeholder="Select the artist" v-model="selectedAuthor">
+          <datalist id="artist">
+            <option v-for="artist in authors" :value="artist.name" :key="artist.id" />
+          </datalist>
         </details>
         <details>
           <summary>
@@ -85,11 +105,11 @@ const resetForm = (e: { preventDefault: () => void }) => {
               <IconMinus />
             </div>
           </summary>
-          <select v-model="inputValues.locationId" placeholder="Select the location">
-            <option :value="location.id" v-for="location in locations" :key="location.id">
-              {{ location.location }}
-            </option>
-          </select>
+
+          <input list="location" placeholder="Select the location" v-model="selectedLocation">
+          <datalist id="location">
+            <option :value="location.location" v-for="location in locations" :key="location.id" />
+          </datalist>
         </details>
         <details>
           <summary>
@@ -139,10 +159,11 @@ const resetForm = (e: { preventDefault: () => void }) => {
     flex-direction: column;
     justify-content: space-between;
 
-    .close-icon {
+    .icon-close {
       position: absolute;
       top: 5rem;
       right: 2.5rem;
+      cursor: pointer;
     }
 
     @media screen and (min-width: $md) {
@@ -173,7 +194,7 @@ summary {
   gap: 0.5rem;
 
   input {
-    max-width: 5rem;
+    max-width: 5.5rem;
   }
 
   ::placeholder {

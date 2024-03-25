@@ -16,8 +16,8 @@ const filters = ref({
   q: '',
   authorId: 0,
   locationId: 0,
-  created_gte: 0,
-  created_lte: 0
+  created_gte: '',
+  created_lte: ''
 });
 
 onMounted(() => store.getPictures(currentPage.value));
@@ -51,8 +51,8 @@ function filterPictures(e: {
   value: {
     authorId: number;
     locationId: number;
-    created_gte: number;
-    created_lte: number;
+    created_gte: string;
+    created_lte: string;
   };
 }) {
   filters.value.authorId = e.value.authorId;
@@ -65,25 +65,27 @@ function filterPictures(e: {
 
 <template>
   <HeaderItem />
-  <FilterMenu
-    @closeMenu="() => (isMenuOpen = !isMenuOpen)"
-    v-show="isMenuOpen"
-    @sentForm="(e) => filterPictures(e)"
-  />
+  <transition name="slide">
+    <FilterMenu @closeMenu="() => (isMenuOpen = !isMenuOpen)" v-show="isMenuOpen"
+      @sentForm="(e) => filterPictures(e)" />
+  </transition>
   <main>
     <div class="wrapper">
       <div class="main_content">
-        <SearchItem
-          @openMenu="() => (isMenuOpen = !isMenuOpen)"
-          @searchPicture="(e) => searchPictures(e)"
-        />
-        <PictureContainer :pictures="pictures" />
-        <PaginationItem
-          v-if="pageCount > 1"
-          :currentPage="currentPage"
-          :pagesCount="pageCount"
-          @changePage="(e) => loadPage(e)"
-        />
+        <SearchItem @openMenu="() => (isMenuOpen = !isMenuOpen)" @searchPicture="(e) => searchPictures(e)" />
+
+        <PictureContainer :pictures="pictures" v-if="pageCount != 0" />
+        <div v-else>
+          <h2>
+            No matches
+          </h2>
+          <p>
+            Please try again with a different spelling or keywords.
+          </p>
+        </div>
+
+        <PaginationItem v-if="pageCount != 0" :currentPage="currentPage" :pagesCount="pageCount"
+          @changePage="(e) => loadPage(e)" />
       </div>
     </div>
   </main>
@@ -109,6 +111,16 @@ main {
       gap: 2.5rem;
     }
   }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.5s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
 }
 </style>
 ./stores/oictures

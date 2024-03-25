@@ -23,6 +23,7 @@ const props = defineProps({
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 1.25rem;
+  overflow: hidden;
 
   @media screen and (min-width: $md) {
     grid-template-columns: repeat(2, 1fr);

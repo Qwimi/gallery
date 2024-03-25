@@ -77,8 +77,8 @@ export const usePictureStore = defineStore('pictures', {
       q: string;
       authorId: number;
       locationId: number;
-      created_gte: number;
-      created_lte: number;
+      created_gte: string;
+      created_lte: string;
     }) {
       const queryParams = [];
       for (const key in filters) {
