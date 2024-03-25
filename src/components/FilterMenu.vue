@@ -5,15 +5,15 @@ import IconClose from './icons/IconClose.vue';
 import { usePictureStore } from '@/stores/pictures';
 import { onMounted, ref, watch } from 'vue';
 
-const store = usePictureStore()
+const store = usePictureStore();
 const authors = ref(store.authors);
 const locations = ref(store.locations);
 const inputValues = ref({
-  author: 0,
-  location: 0,
-  from: 0,
-  to: 0
-})
+  authorId: 0,
+  locationId: 0,
+  created_gte: 0,
+  created_lte: 0
+});
 
 onMounted(() => {
   store.getAllAuthors();
@@ -22,34 +22,33 @@ onMounted(() => {
 
 watch(
   () => store.authors,
-  () => authors.value = store.authors
+  () => (authors.value = store.authors)
 );
 
 watch(
   () => store.locations,
-  () => locations.value = store.locations
+  () => (locations.value = store.locations)
 );
 
 const emit = defineEmits(['closeMenu', 'sentForm']);
 
-const sentForm = (e: { preventDefault: () => void; }) => {
+const sentForm = (e: { preventDefault: () => void }) => {
   e.preventDefault();
 
-  emit('sentForm', inputValues)
-  emit('closeMenu')
-}
+  emit('sentForm', inputValues);
+  emit('closeMenu');
+};
 
-const resetForm = (e: { preventDefault: () => void; }) => {
+const resetForm = (e: { preventDefault: () => void }) => {
   e.preventDefault();
 
   inputValues.value = {
-    author: 0,
-    location: 0,
-    from: 0,
-    to: 0
-  }
-}
-
+    authorId: 0,
+    locationId: 0,
+    created_gte: 0,
+    created_lte: 0
+  };
+};
 </script>
 
 <template>
@@ -70,8 +69,10 @@ const resetForm = (e: { preventDefault: () => void; }) => {
               <IconMinus />
             </div>
           </summary>
-          <select v-model="inputValues.author" placeholder="Select the artist">
-            <option :value="artist.id" v-for="artist in authors" :key="artist.id">{{ artist.name }}</option>
+          <select v-model="inputValues.authorId" placeholder="Select the artist">
+            <option :value="artist.id" v-for="artist in authors" :key="artist.id">
+              {{ artist.name }}
+            </option>
           </select>
         </details>
         <details>
@@ -84,8 +85,9 @@ const resetForm = (e: { preventDefault: () => void; }) => {
               <IconMinus />
             </div>
           </summary>
-          <select v-model="inputValues.location" placeholder="Select the location">
-            <option :value="location.id" v-for="location in locations" :key="location.id">{{ location.location }}
+          <select v-model="inputValues.locationId" placeholder="Select the location">
+            <option :value="location.id" v-for="location in locations" :key="location.id">
+              {{ location.location }}
             </option>
           </select>
         </details>
@@ -100,9 +102,9 @@ const resetForm = (e: { preventDefault: () => void; }) => {
             </div>
           </summary>
           <div class="year-container">
-            <input type="number" v-model="inputValues.from" placeholder="From">
+            <input type="number" v-model="inputValues.created_gte" placeholder="From" />
             <IconMinus />
-            <input type="number" v-model="inputValues.to" placeholder="To">
+            <input type="number" v-model="inputValues.created_lte" placeholder="To" />
           </div>
         </details>
       </div>
@@ -112,7 +114,6 @@ const resetForm = (e: { preventDefault: () => void; }) => {
       </div>
     </form>
   </div>
-
 </template>
 
 <style lang="scss">
@@ -229,7 +230,7 @@ details {
     color: $primary-dark-gray;
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       bottom: 0;
       left: 0;
@@ -247,8 +248,6 @@ details {
     }
   }
 }
-
-
 
 [data-theme='dark'] {
   form {

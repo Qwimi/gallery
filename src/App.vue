@@ -9,44 +9,81 @@ import FilterMenu from './components/FilterMenu.vue';
 
 const store = usePictureStore();
 const pictures = ref(store.pictures);
-const pageCount = ref(store.pages);
+const pageCount = ref(1);
 const currentPage = ref(1);
-const isMenuOpen = ref(false)
-
-onMounted(() => {
-  store.getPictures(currentPage.value);
-  store.getPages();
+const isMenuOpen = ref(false);
+const filters = ref({
+  q: '',
+  authorId: 0,
+  locationId: 0,
+  created_gte: 0,
+  created_lte: 0
 });
+
+onMounted(() => store.getPictures(currentPage.value));
 
 watch(
   () => store.pictures,
-  () => {
-    pictures.value = store.pictures;
-    pageCount.value = store.pages;
-  }
+  () => (pictures.value = store.pictures)
 );
+
+watch(
+  () => store.pages,
+  () => (pageCount.value = store.pages)
+);
+
+watch([filters.value], () => {
+  store.getFilteredPictures(filters.value);
+  store.getPictures(currentPage.value);
+});
 
 async function loadPage(e: { value: number }) {
   currentPage.value = e.value;
   await store.getPictures(currentPage.value);
 }
 
-async function filterPictures(e: { value: number; }) {
-  console.log(e.value);
+function searchPictures(e: { value: string }) {
+  filters.value.q = e.value;
+  currentPage.value = 1;
+}
 
+function filterPictures(e: {
+  value: {
+    authorId: number;
+    locationId: number;
+    created_gte: number;
+    created_lte: number;
+  };
+}) {
+  filters.value.authorId = e.value.authorId;
+  filters.value.locationId = e.value.locationId;
+  filters.value.created_gte = e.value.created_gte;
+  filters.value.created_lte = e.value.created_lte;
+  currentPage.value = 1;
 }
 </script>
 
 <template>
   <HeaderItem />
-  <FilterMenu @closeMenu="() => isMenuOpen = !isMenuOpen" v-show="isMenuOpen" @sentForm="(e) => filterPictures(e)" />
+  <FilterMenu
+    @closeMenu="() => (isMenuOpen = !isMenuOpen)"
+    v-show="isMenuOpen"
+    @sentForm="(e) => filterPictures(e)"
+  />
   <main>
     <div class="wrapper">
       <div class="main_content">
-        <SearchItem @openMenu="() => isMenuOpen = !isMenuOpen" />
+        <SearchItem
+          @openMenu="() => (isMenuOpen = !isMenuOpen)"
+          @searchPicture="(e) => searchPictures(e)"
+        />
         <PictureContainer :pictures="pictures" />
-        <PaginationItem v-if="pageCount > 1" :currentPage="currentPage" :pagesCount="pageCount"
-          @changePage="(e) => loadPage(e)" />
+        <PaginationItem
+          v-if="pageCount > 1"
+          :currentPage="currentPage"
+          :pagesCount="pageCount"
+          @changePage="(e) => loadPage(e)"
+        />
       </div>
     </div>
   </main>
@@ -72,7 +109,6 @@ main {
       gap: 2.5rem;
     }
   }
-
 }
 </style>
 ./stores/oictures

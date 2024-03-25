@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import IconSearch from './icons/IconSearch.vue';
 import IconCloseSmall from './icons/IconCloseSmall.vue';
 import IconFilter from './icons/IconFilter.vue';
 
-const emit = defineEmits(['openMenu']);
+const emit = defineEmits(['openMenu', 'searchPicture']);
 const searchString = ref('');
+watch([searchString], () => emit('searchPicture', searchString));
 </script>
 
 <template>
@@ -15,7 +16,12 @@ const searchString = ref('');
         <span class="search-icon icon-left">
           <IconSearch />
         </span>
-        <input type="text" class="search-input" placeholder="Painting title" v-model="searchString" />
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Painting title"
+          v-model="searchString"
+        />
         <span class="search-icon icon-right" v-show="searchString" @click="searchString = ''">
           <IconCloseSmall />
         </span>

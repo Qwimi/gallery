@@ -7,13 +7,14 @@ export const usePictureStore = defineStore('pictures', {
     pictures: [] as UsingPicure[],
     authors: [] as IAuthor[],
     locations: [] as ILocation[],
-    pages: 0
+    pages: 0,
+    queryLink: ''
   }),
   actions: {
     async getPictures(page: number) {
       try {
         const response = await axios.get(
-          `https://test-front.framework.team/paintings?_page=${page}&_limit=6`
+          `https://test-front.framework.team/paintings?${this.queryLink}&_page=${page}&_limit=6`
         );
         this.pictures = await Promise.all(
           response.data.map(async (elem: IPicture) => {
@@ -27,22 +28,26 @@ export const usePictureStore = defineStore('pictures', {
             };
           })
         );
+        this.getPages();
       } catch (e) {
         console.error(e);
       }
     },
+
     getAuthorById(id: number) {
       return axios.get('https://test-front.framework.team/authors').then((response) => {
         const author = response.data.find((element: IAuthor) => element.id == id);
         return author.name;
       });
     },
+
     getLocationById(id: number) {
       return axios.get('https://test-front.framework.team/locations').then((response) => {
         const location = response.data.find((element: ILocation) => element.id == id);
         return location.location;
       });
     },
+
     async getAllAuthors() {
       try {
         const response = await axios.get('https://test-front.framework.team/authors');
@@ -51,6 +56,7 @@ export const usePictureStore = defineStore('pictures', {
         console.error(e);
       }
     },
+
     async getAllLocations() {
       try {
         const response = await axios.get('https://test-front.framework.team/locations');
@@ -59,9 +65,31 @@ export const usePictureStore = defineStore('pictures', {
         console.error(e);
       }
     },
+
     async getPages() {
-      const pictures = await axios.get('https://test-front.framework.team/paintings');
+      const pictures = await axios.get(
+        `https://test-front.framework.team/paintings?${this.queryLink}`
+      );
       this.pages = Math.ceil(pictures.data.length / 6);
+    },
+
+    getFilteredPictures(filters: {
+      q: string;
+      authorId: number;
+      locationId: number;
+      created_gte: number;
+      created_lte: number;
+    }) {
+      const queryParams = [];
+      for (const key in filters) {
+        if (Object.prototype.hasOwnProperty.call(filters, key)) {
+          const value = filters[key as keyof typeof filters];
+          if (value !== 0 && value !== '' && value !== undefined) {
+            queryParams.push(`${key}=${value}`);
+          }
+        }
+      }
+      this.queryLink = queryParams.join('&');
     }
   }
 });

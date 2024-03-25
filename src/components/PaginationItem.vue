@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import IconArrowLeft from './icons/IconArrowLeft.vue';
 import IconArrowRight from './icons/IconArrowRight.vue';
 const props = defineProps({
@@ -12,12 +12,9 @@ const props = defineProps({
     required: true
   }
 });
-
 const emit = defineEmits(['changePage']);
-
 const current = ref(props.currentPage);
-
-const pages = Array.from({ length: props.pagesCount }, (_, index) => index + 1);
+watch([props.pagesCount], () => console.log('log'));
 
 function toPage(page: number) {
   current.value = page;
@@ -28,18 +25,16 @@ function toPrev() {
   if (current.value > 1) {
     current.value -= 1;
   } else {
-    current.value = pages[pages.length - 1];
+    current.value = props.pagesCount;
   }
   emit('changePage', current);
 }
 
 function toNext() {
-  console.log(pages[pages.length - 1]);
-
-  if (current.value != pages[pages.length - 1]) {
+  if (current.value != props.pagesCount) {
     current.value += 1;
   } else {
-    current.value = pages[0];
+    current.value = 1;
   }
   emit('changePage', current);
 }
@@ -50,7 +45,12 @@ function toNext() {
     <button class="arrow arrow-left" @click="toPrev">
       <IconArrowLeft />
     </button>
-    <button v-for="page in pages" :key="page" :class="{ active: page == current }" @click="toPage(page)">
+    <button
+      v-for="page in props.pagesCount"
+      :key="page"
+      :class="{ active: page == props.currentPage }"
+      @click="toPage(page)"
+    >
       {{ page }}
     </button>
     <button class="arrow arrow-right" @click="toNext">

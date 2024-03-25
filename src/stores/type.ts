@@ -16,6 +16,7 @@ export interface ILocation {
   id: number;
   location: string;
 }
+
 export type UsingPicure = Omit<IPicture, 'authorId' | 'locationId'> & {
   author: string;
   location: string;
