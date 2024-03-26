@@ -2,8 +2,10 @@
 import IconPlus from './icons/IconPlus.vue';
 import IconMinus from './icons/IconMinus.vue';
 import IconClose from './icons/IconClose.vue';
+import IconDropdown from './icons/IconDropdown.vue';
 import { usePictureStore } from '@/stores/pictures';
 import { onMounted, ref, watch } from 'vue';
+import VSelect from 'vue-select';
 
 const store = usePictureStore();
 const authors = ref(store.authors);
@@ -14,8 +16,13 @@ const inputValues = ref({
   created_gte: '',
   created_lte: ''
 });
-const selectedAuthor = ref('')
-let selectedLocation = ref('')
+const selectedAuthor = ref(null);
+const selectedLocation = ref(null);
+const attributes = {
+  ref: 'openIndicator',
+  role: 'presentation',
+  class: 'vs__open-indicator'
+};
 
 onMounted(() => {
   store.getAllAuthors();
@@ -32,22 +39,27 @@ watch(
   () => (locations.value = store.locations)
 );
 
-watch(
-  [selectedAuthor],
-  () => {
-    const author = authors.value.find(el => el.name === selectedAuthor.value)
-    if (author) inputValues.value.authorId = author.id
+watch([selectedAuthor], () => {
+  if (selectedAuthor.value != null) {
+    const selectedItem: { id: number; name: string } = selectedAuthor.value;
+    const author = authors.value.find((el) => el.id === selectedItem.id);
+    inputValues.value.authorId = author ? author.id : 0;
+  } else {
+    inputValues.value.authorId = 0;
   }
-);
+  console.log(inputValues.value.authorId);
+});
 
-
-watch(
-  [selectedLocation],
-  () => {
-    const location = locations.value.find(el => el.location === selectedLocation.value)
-    if (location) inputValues.value.locationId = location.id
+watch([selectedLocation], () => {
+  if (selectedLocation.value != null) {
+    const selectedItem: { id: number; location: string } = selectedLocation.value;
+    const author = authors.value.find((el) => el.id === selectedItem.id);
+    inputValues.value.locationId = author ? author.id : 0;
+  } else {
+    inputValues.value.locationId = 0;
   }
-);
+  console.log(inputValues.value.locationId);
+});
 
 const emit = defineEmits(['closeMenu', 'sentForm']);
 
@@ -67,13 +79,14 @@ const resetForm = (e: { preventDefault: () => void }) => {
     created_gte: '',
     created_lte: ''
   };
-  selectedAuthor.value = ''
-  selectedLocation.value = ''
+  selectedAuthor.value = null;
+  selectedLocation.value = null;
 };
 </script>
 
 <template>
   <div class="form-overflow">
+    <div></div>
     <div class="closeMenu" @click="$emit('closeMenu')"></div>
     <form>
       <span class="icon-close" @click="$emit('closeMenu')">
@@ -90,10 +103,15 @@ const resetForm = (e: { preventDefault: () => void }) => {
               <IconMinus />
             </div>
           </summary>
-          <input list="artist" placeholder="Select the artist" v-model="selectedAuthor">
-          <datalist id="artist">
-            <option v-for="artist in authors" :value="artist.name" :key="artist.id" />
-          </datalist>
+
+          <v-select v-model="selectedAuthor" :options="authors" placeholder="Select the author" label="name"
+            track-by="id" :clearable="false" searchable>
+            <template #open-indicator="{ attributes }">
+              <span>
+                <IconDropdown />
+              </span>
+            </template>
+          </v-select>
         </details>
         <details>
           <summary>
@@ -106,10 +124,17 @@ const resetForm = (e: { preventDefault: () => void }) => {
             </div>
           </summary>
 
-          <input list="location" placeholder="Select the location" v-model="selectedLocation">
-          <datalist id="location">
-            <option :value="location.location" v-for="location in locations" :key="location.id" />
-          </datalist>
+          <v-select v-model="selectedLocation" :options="locations" placeholder="Select the location" label="location"
+            :clearable="false" searchable>
+            <template #open-indicator="{ attributes }">
+              <span>
+                <IconDropdown />
+              </span>
+            </template>
+            <template #no-options="{ search, searching, loading }">
+              <span> This is the no options slot. </span>
+            </template>
+          </v-select>
         </details>
         <details>
           <summary>
@@ -137,6 +162,10 @@ const resetForm = (e: { preventDefault: () => void }) => {
 </template>
 
 <style lang="scss">
+option:hover {
+  background-color: #3f4348;
+}
+
 .form-overflow {
   position: absolute;
   top: 0;
@@ -176,12 +205,6 @@ const resetForm = (e: { preventDefault: () => void }) => {
   }
 }
 
-option {
-  padding: 0.5rem 1rem;
-  font-family: 'Inter Light';
-  color: $primary-dark-gray;
-}
-
 summary {
   display: flex;
   justify-content: space-between;
@@ -204,7 +227,6 @@ summary {
 
 details {
   max-height: 1.25rem;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

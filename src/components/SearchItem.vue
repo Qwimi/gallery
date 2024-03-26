@@ -16,7 +16,12 @@ watch([searchString], () => emit('searchPicture', searchString));
         <span class="search-icon icon-left">
           <IconSearch />
         </span>
-        <input type="text" class="search-input" placeholder="Painting title" v-model="searchString" />
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Painting title"
+          v-model="searchString"
+        />
         <span class="search-icon icon-right" v-show="searchString" @click="searchString = ''">
           <IconCloseSmall />
         </span>

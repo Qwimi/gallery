@@ -103,10 +103,11 @@ svg {
 }
 
 input,
-select {
+.v-select {
   font-family: 'Inter Light';
   white-space: nowrap;
   text-overflow: ellipsis;
+  background-color: $primary-white;
   width: 100%;
   padding: 0.5rem 1rem;
   border: 1px solid $primary-light-gray;
@@ -127,6 +128,79 @@ select {
   font-size: 0.75rem;
   @media screen and (min-width: $md) {
     font-size: 1rem;
+  }
+}
+
+.v-select {
+  font-family: 'Inter Light';
+  .vs__dropdown-toggle {
+    border: none;
+  }
+  .vs__search,
+  .vs__selected-options,
+  .vs__dropdown-toggle,
+  .vs__actions,
+  .vs__selected,
+  .vs__no-options {
+    font-family: 'Inter Light';
+    margin: 0;
+    padding: 0;
+  }
+
+  input {
+    border: none;
+    &:focus {
+      font-size: 1rem;
+      line-height: 1;
+      margin: 0;
+      padding: 0;
+    }
+    &::placeholder {
+      font-size: 1rem;
+      line-height: 1;
+    }
+  }
+
+  .vs__actions span {
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    transition: all 0.3s;
+    fill: $secondary-gray;
+  }
+
+  &.vs--open {
+    border: 1px solid $primary-dark-gray;
+    svg {
+      rotate: 180deg;
+    }
+  }
+
+  .vs__dropdown-option,
+  .vs__no-options {
+    color: $primary-dark-gray;
+    font-family: 'Inter Light';
+    padding: 0.5rem 1rem;
+    color: $primary-dark-gray;
+    text-align: left;
+  }
+
+  .vs__no-options {
+    color: $secondary-gray;
+  }
+
+  .vs__dropdown-option--highlight {
+    background-color: rgba($color: $primary-black, $alpha: 0.05);
+  }
+
+  .vs__dropdown-menu {
+    max-height: 16rem;
+    top: 2.5rem;
+    overflow-x: hidden;
+    box-shadow: none;
+    border: none;
   }
 }
 
@@ -158,16 +232,49 @@ button {
   }
 
   input,
-  select {
+  .v-select {
     background-color: $secondary-black;
     border: 1px solid $secondary-black;
     color: $primary-light-gray;
     &:focus {
       border-color: $primary-light-gray;
     }
+    &::placeholder {
+      color: $primary-dark-gray;
+    }
   }
 
   .input-container {
     color: $primary-light-gray;
+  }
+
+  .v-select {
+    input {
+      border: none;
+    }
+
+    .vs__selected {
+      color: $primary-light-gray;
+    }
+
+    svg {
+      fill: $primary-dark-gray;
+    }
+
+    &.vs--open {
+      border: 1px solid $primary-dark-gray;
+    }
+
+    .vs__dropdown-option {
+      color: $primary-light-gray;
+    }
+
+    .vs__dropdown-option--highlight {
+      background-color: rgba($color: #cdcdcd, $alpha: 0.05);
+    }
+
+    .vs__dropdown-menu {
+      background-color: $secondary-black;
+    }
   }
 }
