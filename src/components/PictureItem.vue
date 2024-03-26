@@ -8,6 +8,7 @@ const props = defineProps({
     required: true
   }
 });
+
 const fullUrl = (url: String) => `https://test-front.framework.team${url}`;
 </script>
 

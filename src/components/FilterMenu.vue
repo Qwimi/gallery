@@ -104,8 +104,15 @@ const resetForm = (e: { preventDefault: () => void }) => {
             </div>
           </summary>
 
-          <v-select v-model="selectedAuthor" :options="authors" placeholder="Select the author" label="name"
-            track-by="id" :clearable="false" searchable>
+          <v-select
+            v-model="selectedAuthor"
+            :options="authors"
+            placeholder="Select the author"
+            label="name"
+            track-by="id"
+            :clearable="false"
+            searchable
+          >
             <template #open-indicator="{ attributes }">
               <span>
                 <IconDropdown />
@@ -124,8 +131,14 @@ const resetForm = (e: { preventDefault: () => void }) => {
             </div>
           </summary>
 
-          <v-select v-model="selectedLocation" :options="locations" placeholder="Select the location" label="location"
-            :clearable="false" searchable>
+          <v-select
+            v-model="selectedLocation"
+            :options="locations"
+            placeholder="Select the location"
+            label="location"
+            :clearable="false"
+            searchable
+          >
             <template #open-indicator="{ attributes }">
               <span>
                 <IconDropdown />

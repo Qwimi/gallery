@@ -68,22 +68,34 @@ function filterPictures(e: {
 <template>
   <HeaderItem />
   <transition name="slide">
-    <FilterMenu @closeMenu="() => (isMenuOpen = !isMenuOpen)" v-show="isMenuOpen"
-      @sentForm="(e) => filterPictures(e)" />
+    <FilterMenu
+      @closeMenu="() => (isMenuOpen = !isMenuOpen)"
+      v-show="isMenuOpen"
+      @sentForm="(e) => filterPictures(e)"
+    />
   </transition>
   <main>
     <div class="wrapper">
       <div class="main_content">
-        <SearchItem @openMenu="() => (isMenuOpen = !isMenuOpen)" @searchPicture="(e) => searchPictures(e)" />
+        <SearchItem
+          @openMenu="() => (isMenuOpen = !isMenuOpen)"
+          @searchPicture="(e) => searchPictures(e)"
+        />
 
         <PictureContainer :pictures="pictures" v-if="pageCount != 0" />
         <div class="error-container" v-else>
-          <h2 class="error-title">No matches with <b>{{ filters.q }}</b></h2>
+          <h2 class="error-title">
+            No matches with <b>{{ filters.q }}</b>
+          </h2>
           <p class="error-subtitle">Please try again with a different spelling or keywords.</p>
         </div>
 
-        <PaginationItem v-if="pageCount != 0" :currentPage="currentPage" :pagesCount="pageCount"
-          @changePage="(e) => loadPage(e)" />
+        <PaginationItem
+          v-if="pageCount != 0"
+          :currentPage="currentPage"
+          :pagesCount="pageCount"
+          @changePage="(e) => loadPage(e)"
+        />
       </div>
     </div>
   </main>
