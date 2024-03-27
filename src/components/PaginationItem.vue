@@ -16,12 +16,12 @@ const emit = defineEmits(['changePage']);
 const current = ref(props.currentPage);
 watch([props.pagesCount], () => console.log('log'));
 
-function toPage(page: number) {
+const toPage = (page: number) => {
   current.value = page;
   emit('changePage', current);
 }
 
-function toPrev() {
+const toPrev = () => {
   if (current.value > 1) {
     current.value -= 1;
   } else {
@@ -30,13 +30,29 @@ function toPrev() {
   emit('changePage', current);
 }
 
-function toNext() {
+const toNext = () => {
   if (current.value != props.pagesCount) {
     current.value += 1;
   } else {
     current.value = 1;
   }
   emit('changePage', current);
+}
+
+const checkSymbol = (page: number) => {
+  switch (page) {
+    case 1:
+    case props.currentPage:
+    case props.currentPage + 1:
+    case props.currentPage - 1:
+    case props.pagesCount:
+      return page
+    case props.currentPage + 2:
+    case props.currentPage - 2:
+      return '...'
+    default:
+      return false
+  }
 }
 </script>
 
@@ -45,13 +61,10 @@ function toNext() {
     <button class="arrow arrow-left" @click="toPrev">
       <IconArrowLeft />
     </button>
-    <button
-      v-for="page in props.pagesCount"
-      :key="page"
-      :class="{ active: page == props.currentPage }"
-      @click="toPage(page)"
-    >
-      {{ page }}
+    <button v-for="page in props.pagesCount" :key="page" @click="toPage(page)">
+      <span v-if="checkSymbol(page)" :class="{ active: page == props.currentPage }">
+        {{ checkSymbol(page) }}
+      </span>
     </button>
     <button class="arrow arrow-right" @click="toNext">
       <IconArrowRight />
@@ -64,11 +77,14 @@ function toNext() {
   display: flex;
   gap: 0.25rem;
 
-  button {
+  button span {
     font-family: 'Inter Light';
     color: $primary-dark-gray;
     height: 1.5rem;
     width: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover:not(.arrow, .active) {
       border-bottom: 1px solid $secondary-gray;
