@@ -19,7 +19,7 @@ watch([props.pagesCount], () => console.log('log'));
 const toPage = (page: number) => {
   current.value = page;
   emit('changePage', current);
-}
+};
 
 const toPrev = () => {
   if (current.value > 1) {
@@ -28,7 +28,7 @@ const toPrev = () => {
     current.value = props.pagesCount;
   }
   emit('changePage', current);
-}
+};
 
 const toNext = () => {
   if (current.value != props.pagesCount) {
@@ -37,7 +37,7 @@ const toNext = () => {
     current.value = 1;
   }
   emit('changePage', current);
-}
+};
 
 const checkSymbol = (page: number) => {
   switch (page) {
@@ -46,14 +46,14 @@ const checkSymbol = (page: number) => {
     case props.currentPage + 1:
     case props.currentPage - 1:
     case props.pagesCount:
-      return page
+      return page;
     case props.currentPage + 2:
     case props.currentPage - 2:
-      return '...'
+      return '...';
     default:
-      return false
+      return false;
   }
-}
+};
 </script>
 
 <template>
